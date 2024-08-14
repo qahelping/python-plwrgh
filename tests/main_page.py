@@ -1,6 +1,6 @@
 from playwright.sync_api import Page, expect, Locator
 
-from core.expects import Expects
+from expects import Expects
 
 
 class IntroPythonPage:

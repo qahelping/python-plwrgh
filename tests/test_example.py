@@ -1,8 +1,8 @@
 import pytest
 from playwright.sync_api import Page, expect
 
-from pages.main_page import IntroPythonPage
-from pages.python_intro_page import MainPage
+from main_page import IntroPythonPage
+from python_intro_page import MainPage
 
 
 @pytest.fixture(scope="function", autouse=True)

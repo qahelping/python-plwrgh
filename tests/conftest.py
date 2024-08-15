@@ -5,7 +5,9 @@ import pytest
 import requests
 from _pytest.fixtures import FixtureRequest
 from _pytest.nodes import Item
+from axe_playwright_python.sync_playwright import Axe
 from playwright.sync_api import Page, Playwright
+
 @pytest.fixture(autouse=True)
 def attach_playwright_results(page: Page, request: FixtureRequest):
     """Fixture to perform teardown actions and attach results to Allure report

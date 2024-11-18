@@ -1,4 +1,6 @@
 import re
+import time
+
 from playwright.sync_api import Playwright, sync_playwright, expect
 
 
@@ -8,6 +10,7 @@ def run(playwright: Playwright) -> None:
     page = context.new_page()
 
     page.goto("https://playwright.dev/")
+    time.sleep(10)
     page.get_by_role("link", name="Community").click()
     expect(page.get_by_role("heading", name="Welcome")).to_be_visible()
 
@@ -15,9 +18,9 @@ def run(playwright: Playwright) -> None:
     page2.goto("https://playwright.dev/python/docs/api/class-browsercontext")
     count = context.pages
 
-    cookies = {'name': 'value'}
-    context.add_cookies([cookies])
-    context.clear_cookies()
+    # cookies = {'name': 'value'}
+    # context.add_cookies([cookies])
+    # context.clear_cookies()
     print(count)
     context.close()
     browser.close()

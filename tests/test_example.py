@@ -1,7 +1,7 @@
 import allure
 import pytest
 from axe_playwright_python.sync_playwright import Axe
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect, Route
 
 from helpers.axe import AxeHelper
 from pages.community_page import CommunityPage
@@ -41,7 +41,7 @@ def test_page_object(page):
 
 @allure.title("Test Assert Snapshot for page")
 def test_snapshot1(page, assert_snapshot):
-    assert_snapshot(page.screenshot(), "./__screenshots__/eexample.png")
+    assert_snapshot(page.screenshot(), "./__screenshots__/example.png")
 
 
 @pytest.mark.only
@@ -50,12 +50,41 @@ def test_snapshot2(page, assert_snapshot):
     assert_snapshot(page.locator('[class="hero hero--primary heroBanner_UJJx"]').screenshot(), "example.png")
 
 @pytest.mark.only
+@allure.title("Test ConsoleMessage")
+def test_read_from_console(page):
+    page.on("console", lambda msg: print(msg.text))
+
+    page.on("console", lambda msg: print(f"error: {msg.text}") if msg.type == "error" else None)
+
+    with page.expect_console_message() as msg_info:
+        page.evaluate("console.log('hello', 42, { foo: 'bar' })")
+    msg = msg_info.value
+
+    msg.args[0].json_value()
+    msg.args[1].json_value()
+
+@allure.title("Test mock")
+def test_mock_the_fruit_api(page: Page):
+    def handle(route: Route):
+        json = [{"name": "Strawberry", "id": 21}]
+        # fulfill the route with the mock data
+        route.fulfill(json=json)
+
+    # Intercept the route to the fruit API
+    page.route("*/**/api/v1/fruits", handle)
+
+    # Go to the page
+    page.goto("https://demo.playwright.dev/api-mocking")
+
+    # Assert that the Strawberry fruit is visible
+    expect(page.get_by_text("Strawberry")).to_be_visible()
+
 @allure.title("Test Accessibility with Default Counts")
 def test_accessibility_default_counts(page):
     axe_playwright = AxeHelper(Axe())
     axe_playwright.check_accessibility(page)
 
-@pytest.mark.only
+
 @allure.title("Test Accessibility with Custom Counts")
 def test_accessibility_custom_counts(page):
     axe_playwright = AxeHelper(Axe())

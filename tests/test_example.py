@@ -44,12 +44,10 @@ def test_snapshot1(page, assert_snapshot):
     assert_snapshot(page.screenshot(), "./__screenshots__/example.png")
 
 
-@pytest.mark.only
 @allure.title("Test Assert Snapshot for locator")
 def test_snapshot2(page, assert_snapshot):
     assert_snapshot(page.locator('[class="hero hero--primary heroBanner_UJJx"]').screenshot(), "example.png")
 
-@pytest.mark.only
 @allure.title("Test ConsoleMessage")
 def test_read_from_console(page):
     page.on("console", lambda msg: print(msg.text))

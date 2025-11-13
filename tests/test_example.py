@@ -48,6 +48,7 @@ def test_snapshot1(page, assert_snapshot):
 def test_snapshot2(page, assert_snapshot):
     assert_snapshot(page.locator('[class="hero hero--primary heroBanner_UJJx"]').screenshot(), "example.png")
 
+@pytest.mark.console
 @allure.title("Test ConsoleMessage")
 def test_read_from_console(page):
     page.on("console", lambda msg: print(msg.text))
@@ -61,8 +62,14 @@ def test_read_from_console(page):
     msg.args[0].json_value()
     msg.args[1].json_value()
 
+
+@pytest.mark.mock
 @allure.title("Test mock")
 def test_mock_the_fruit_api(page: Page):
+    page.goto("https://demo.playwright.dev/api-mocking")
+
+    page.wait_for_timeout(10000)
+
     def handle(route: Route):
         json = [{"name": "Strawberry", "id": 21}]
         # fulfill the route with the mock data
@@ -74,6 +81,7 @@ def test_mock_the_fruit_api(page: Page):
     # Go to the page
     page.goto("https://demo.playwright.dev/api-mocking")
 
+    page.wait_for_timeout(10000)
     # Assert that the Strawberry fruit is visible
     expect(page.get_by_text("Strawberry")).to_be_visible()
 

@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Any
 
 import allure
 import pytest
@@ -44,3 +44,31 @@ def pytest_runtest_makereport(item: Item):
     outcome = yield
     rep = outcome.get_result()
     setattr(item, f"rep_{rep.when}", rep)
+
+
+# @pytest.fixture
+# def browser_context_args(
+#     browser_context_args: Dict,
+#     locale: str,
+#     project: str,
+#     build,
+#     playwright,
+#     pytestconfig,
+#     base_url,
+# ) -> Dict[str, Any]:
+#     def _accept_language(loc: str) -> str:
+#         lang = loc.split("-")[0]
+#         return f"{loc},{lang};q=0.9,en-US;q=0.8,en;q=0.7"
+#
+#     context = {
+#         **browser_context_args,
+#         "locale": locale,
+#         "ignore_https_errors": True,
+#         "extra_http_headers": {
+#             **(browser_context_args.get("extra_http_headers") or {}),
+#             "Accept-Language": _accept_language(locale),
+#         },
+#         "base_url": base_url,
+#     }
+#     context.update(playwright.devices["Pixel 5"])
+#     return context
